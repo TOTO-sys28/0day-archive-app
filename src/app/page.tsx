@@ -1,103 +1,262 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+import { useState } from 'react';
+import { SearchBar } from '@/components/SearchBar';
+import { FilterPanel } from '@/components/FilterPanel';
+import { StatsPanel } from '@/components/StatsPanel';
+import { ExploitTable } from '@/components/ExploitTable';
+import { ParticleBackground } from '@/components/ParticleBackground';
+import { LoadingSkeleton } from '@/components/LoadingSkeleton';
+import { downloadAllExploits } from '@/lib/download';
+import { useExploits } from '@/hooks/useExploits';
+import { SearchFilters } from '@/lib/types';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChevronLeft, ChevronRight, Download } from 'lucide-react';
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+export default function HomePage() {
+  const [filters, setFilters] = useState<SearchFilters>({
+    query: '',
+    category: '',
+    author: '',
+    cve: '',
+    year: ''
+  });
+
+  const {
+    exploits,
+    stats,
+    loading,
+    error,
+    pagination,
+    setPage,
+    setFilters: setFiltersOptimized,
+    setSorting
+  } = useExploits(filters);
+
+  const handleFilterChange = (newFilters: Partial<SearchFilters>) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+    setFiltersOptimized({ ...filters, ...newFilters });
+  };
+
+  const handleSort = (column: keyof Exploit, order: 'asc' | 'desc') => {
+    setSorting(column, order);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background relative">
+        <ParticleBackground />
+        <div className="container mx-auto px-4 py-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Sidebar skeleton */}
+            <div className="lg:col-span-1 space-y-6">
+              <Card>
+                <CardHeader>
+                  <div className="h-6 bg-muted rounded w-32 animate-pulse"></div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="h-8 bg-muted rounded animate-pulse"></div>
+                      <div className="h-8 bg-muted rounded animate-pulse"></div>
+                      <div className="h-8 bg-muted rounded animate-pulse"></div>
+                      <div className="h-8 bg-muted rounded animate-pulse"></div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            
+            {/* Main content skeleton */}
+            <div className="lg:col-span-3">
+              <LoadingSkeleton />
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background relative">
+        <ParticleBackground />
+        <div className="container mx-auto px-4 py-8 relative z-10">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-destructive mb-4">Error Loading Data</h1>
+            <p className="text-muted-foreground">{error}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background relative">
+      <ParticleBackground />
+      {/* Header */}
+      <header className="border-b bg-card">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold">0day.sigma Archive</h1>
+              <p className="text-muted-foreground mt-1">
+                Historical exploits and vulnerability research from the underground security community
+              </p>
+            </div>
+            <div className="text-right text-sm text-muted-foreground">
+              <div>Powered by FullHunt</div>
+              <div>Educational Use Only</div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 relative z-10">
+          {/* Sidebar */}
+          <div className="lg:col-span-1 space-y-6">
+            <StatsPanel stats={stats} filteredCount={pagination.totalItems} />
+            <FilterPanel
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              categories={stats.categories}
+              authors={stats.authors}
+              years={stats.years}
+              stats={stats}
+            />
+          </div>
+
+          {/* Main Content */}
+          <div className="lg:col-span-3 space-y-6">
+            {/* Search */}
+            <Card className="card-glow">
+              <CardHeader>
+                <CardTitle>Search Exploits</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <SearchBar
+                  value={filters.query}
+                  onChange={(value) => handleFilterChange({ query: value })}
+                  placeholder="Search by title, author, CVE, or content..."
+                />
+              </CardContent>
+            </Card>
+
+            {/* Results */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold">
+                  Exploits ({pagination.totalItems.toLocaleString()})
+                </h2>
+                <div className="flex items-center gap-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => downloadAllExploits(exploits)}
+                    className="flex items-center gap-2"
+                  >
+                    <Download className="h-4 w-4" />
+                    Download Page ({exploits.length})
+                  </Button>
+                  <div className="text-sm text-muted-foreground">
+                    Page {pagination.page} of {pagination.totalPages}
+                  </div>
+                </div>
+        </div>
+
+              <ExploitTable
+                exploits={exploits}
+                onSort={handleSort}
+                className="card-glow"
+              />
+
+              {/* Pagination */}
+              {pagination.totalPages > 1 && (
+                <div className="flex items-center justify-center space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPage(Math.max(1, pagination.page - 1))}
+                    disabled={!pagination.hasPrev}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    Previous
+                  </Button>
+                  
+                  <div className="flex items-center space-x-1">
+                    {/* Show first page */}
+                    {pagination.page > 3 && (
+                      <>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setPage(1)}
+                        >
+                          1
+                        </Button>
+                        {pagination.page > 4 && <span className="text-muted-foreground">...</span>}
+                      </>
+                    )}
+                    
+                    {/* Show pages around current page */}
+                    {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
+                      let page;
+                      if (pagination.totalPages <= 5) {
+                        page = i + 1;
+                      } else if (pagination.page <= 3) {
+                        page = i + 1;
+                      } else if (pagination.page >= pagination.totalPages - 2) {
+                        page = pagination.totalPages - 4 + i;
+                      } else {
+                        page = pagination.page - 2 + i;
+                      }
+                      
+                      if (page < 1 || page > pagination.totalPages) return null;
+                      
+                      return (
+                        <Button
+                          key={page}
+                          variant={pagination.page === page ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setPage(page)}
+                        >
+                          {page}
+                        </Button>
+                      );
+                    })}
+                    
+                    {/* Show last page */}
+                    {pagination.page < pagination.totalPages - 2 && (
+                      <>
+                        {pagination.page < pagination.totalPages - 3 && <span className="text-muted-foreground">...</span>}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setPage(pagination.totalPages)}
+                        >
+                          {pagination.totalPages}
+                        </Button>
+                      </>
+                    )}
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPage(Math.min(pagination.totalPages, pagination.page + 1))}
+                    disabled={!pagination.hasNext}
+                  >
+                    Next
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
