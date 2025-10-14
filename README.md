@@ -40,7 +40,7 @@ A modern, full-stack web application for browsing the legendary 0day.today explo
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/0day-archive-app.git
+   git clone https://github.com/TOTO-sys28/0day-archive-app.git
    cd 0day-archive-app
    ```
 
