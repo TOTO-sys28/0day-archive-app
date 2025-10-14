@@ -169,5 +169,7 @@ If you encounter any issues or have questions:
 - Performance optimizations
 
 ---
+<img width="1440" height="900" alt="image" src="https://github.com/user-attachments/assets/937761a0-41fb-4780-a911-2c0aeeaf0936" />
+
 
 **⚠️ Disclaimer**: This tool is for educational and authorized security research only. Users are responsible for complying with all applicable laws and regulations.
