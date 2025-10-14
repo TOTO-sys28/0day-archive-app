@@ -18,9 +18,6 @@ A modern, full-stack web application for browsing the legendary 0day.today explo
 - **⚡ Performance**: Optimized loading with server-side processing
 - **🔒 Educational**: Proper disclaimers and educational use warnings
 
-## 🚀 Live Demo
-
-[View Live Demo](https://your-username.github.io/0day-archive-app) (Replace with your actual deployment URL)
 
 ## 🛠️ Tech Stack
 
@@ -107,88 +104,6 @@ A modern, full-stack web application for browsing the legendary 0day.today explo
 └── README.md
 ```
 
-## 🚀 Deployment
-
-### Option 1: Vercel (Recommended)
-
-1. **Push to GitHub**
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
-   ```
-
-2. **Deploy to Vercel**
-   - Go to [vercel.com](https://vercel.com)
-   - Import your GitHub repository
-   - Deploy automatically
-
-### Option 2: GitHub Pages
-
-1. **Update package.json**
-   ```json
-   {
-     "scripts": {
-       "export": "next build && next export"
-     }
-   }
-   ```
-
-2. **Create .github/workflows/deploy.yml**
-   ```yaml
-   name: Deploy to GitHub Pages
-   on:
-     push:
-       branches: [ main ]
-   jobs:
-     deploy:
-       runs-on: ubuntu-latest
-       steps:
-         - uses: actions/checkout@v3
-         - uses: actions/setup-node@v3
-           with:
-             node-version: '18'
-         - run: npm install
-         - run: npm run build
-         - run: npm run export
-         - uses: peaceiris/actions-gh-pages@v3
-           with:
-             github_token: ${{ secrets.GITHUB_TOKEN }}
-             publish_dir: ./out
-   ```
-
-### Option 3: Netlify
-
-1. **Build settings**
-   - Build command: `npm run build`
-   - Publish directory: `.next`
-
-2. **Deploy**
-   - Connect your GitHub repository
-   - Deploy automatically
-
-## 🔧 Configuration
-
-### Environment Variables
-
-Create a `.env.local` file (optional):
-
-```env
-# Optional: Custom API base URL
-NEXT_PUBLIC_API_URL=http://localhost:3000/api
-```
-
-### Data Management
-
-The application uses pre-processed JSON files for optimal performance:
-
-- `public/data/exploits.json` - All exploit data (39,408 records)
-- `public/data/stats.json` - Archive statistics and metadata
-
-To update the data, run:
-```bash
-node scripts/aggregate-data.js
-```
 
 ## 📊 Performance
 
@@ -239,9 +154,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you encounter any issues or have questions:
 
-1. Check the [Issues](https://github.com/your-username/0day-archive-app/issues) page
+1. Check the [Issues](https://github.com/TOTO-sys28/0day-archive-app/issues) page
 2. Create a new issue with detailed information
-3. Contact: [your-email@example.com](mailto:your-email@example.com)
+3. Contact: [your-email@example.com](mailto:TOTOBOBDOD1@proton.me)
 
 ## 🔄 Changelog
 
