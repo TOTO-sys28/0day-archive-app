@@ -58,6 +58,12 @@ A modern, full-stack web application for browsing the legendary 0day.today explo
    node scripts/aggregate-data.js
    ```
 
+   Warn. **DATA**
+   ```bash
+   # You need to Get the Data Folder from This repo
+   fullhunt/0day-today-archive
+   ```
+
 4. **Start the development server**
    ```bash
    npm run dev
@@ -130,13 +136,6 @@ This application is designed for educational and research purposes only. Users a
 - **Data Processing**: Aggregated and optimized for web display
 - **Attribution**: FullHunt - The Next Generation Attack Surface Management Platform
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## 📝 License
 
