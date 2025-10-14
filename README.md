@@ -156,7 +156,7 @@ If you encounter any issues or have questions:
 
 1. Check the [Issues](https://github.com/TOTO-sys28/0day-archive-app/issues) page
 2. Create a new issue with detailed information
-3. Contact: [your-email@example.com](mailto:TOTOBOBDOD1@proton.me)
+3. Contact: [TOTOBOBDOD1@proton.me](mailto:TOTOBOBDOD1@proton.me)
 
 ## 🔄 Changelog
 
